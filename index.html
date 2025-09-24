@@ -2,19 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Countdown to December 19</title>
+  <title>Avatar 3 Countdown</title>
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       background: #111;
       color: #fff;
       font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      font-family: Papyrus, fantasy; /* Papyrus if available */
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #4ecdc4;
+      text-shadow: 2px 2px 8px rgba(0, 255, 255, 0.3);
     }
     .countdown {
-      text-align: center;
       font-size: 3em;
       background: #222;
       padding: 20px 40px;
@@ -28,6 +36,8 @@
   </style>
 </head>
 <body>
+  <h1>Time until James Cameron's Avatar 3: Fire and Ash</h1>
+
   <div class="countdown" id="countdown">
     <span id="days">0</span><span class="label"> days </span>
     <span id="hours">0</span><span class="label"> hrs </span>
@@ -44,7 +54,7 @@
       const distance = targetDate - now;
 
       if (distance <= 0) {
-        document.getElementById("countdown").innerHTML = "🎉 December 19 is here!";
+        document.getElementById("countdown").innerHTML = "🎉 Avatar 3 Release Day!";
         return;
       }
 
