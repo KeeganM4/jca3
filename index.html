@@ -2,44 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Avatar 3 Countdown</title>
+  <title>Avatar Countdown</title>
   <style>
     body {
       margin: 0;
-      overflow: hidden; /* so particles don’t cause scrollbars */
+      overflow: hidden;
       background: #0b0c10;
-      color: #fff;
+      color: #03cdf3;
       font-family: Papyrus, fantasy;
       text-align: center;
     }
     h1 {
       position: relative;
       z-index: 1;
-      font-size: 2.5em;
-      margin-top: 60px;
-      color: #4ecdc4;
-      text-shadow: 0 0 10px #00fff7, 0 0 20px #00d4ff;
+      font-size: 2.2em;
+      margin-top: 40px;
+      color: #03cdf3;
+      text-shadow: 0 0 10px #03cdf3, 0 0 20px #03cdf3;
     }
     .countdown {
       position: relative;
       z-index: 1;
-      font-size: 3em;
+      font-size: 2.8em;
       background: rgba(20,20,20,0.7);
       padding: 20px 40px;
       border-radius: 15px;
-      margin-top: 20px;
-      box-shadow: 0 0 25px rgba(0,255,200,0.2);
-      color: #00eaff;
+      margin: 20px auto;
+      box-shadow: 0 0 25px rgba(3,205,243,0.3);
+      color: #03cdf3;
       text-shadow: 
-        0 0 10px #00eaff,
-        0 0 20px #00eaff,
-        0 0 40px #00ffcc;
+        0 0 10px #03cdf3,
+        0 0 20px #03cdf3,
+        0 0 40px #03cdf3;
       display: inline-block;
     }
     .label {
-      font-size: 0.4em;
-      color: #88fff7;
-      text-shadow: 0 0 8px #00ffcc;
+      font-size: 0.35em;
+      color: #03cdf3;
+      text-shadow: 0 0 8px #03cdf3;
     }
     canvas {
       position: fixed;
@@ -47,48 +47,74 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0; /* behind text */
+      z-index: 0;
     }
   </style>
 </head>
 <body>
   <canvas id="particles"></canvas>
 
+  <!-- Clock 1 -->
   <h1>Time until James Cameron's Avatar 3: Fire and Ash</h1>
+  <div class="countdown" id="countdown1">
+    <span id="days1">0</span><span class="label"> days </span>
+    <span id="hours1">0</span><span class="label"> hrs </span>
+    <span id="minutes1">0</span><span class="label"> min </span>
+    <span id="seconds1">0</span><span class="label"> sec</span>
+  </div>
 
-  <div class="countdown" id="countdown">
-    <span id="days">0</span><span class="label"> days </span>
-    <span id="hours">0</span><span class="label"> hrs </span>
-    <span id="minutes">0</span><span class="label"> min </span>
-    <span id="seconds">0</span><span class="label"> sec</span>
+  <!-- Clock 2 -->
+  <h1>Time until James Cameron's Avatar 4</h1>
+  <div class="countdown" id="countdown2">
+    <span id="days2">0</span><span class="label"> days </span>
+    <span id="hours2">0</span><span class="label"> hrs </span>
+    <span id="minutes2">0</span><span class="label"> min </span>
+    <span id="seconds2">0</span><span class="label"> sec</span>
   </div>
 
   <script>
-    // === Countdown Logic ===
-    const targetDate = new Date("December 19, 2025 00:00:00").getTime();
+    // === Countdown Targets ===
+    const target1 = new Date("December 19, 2025 00:00:00").getTime();
+    const target2 = new Date("December 21, 2029 00:00:00").getTime();
 
-    function updateCountdown() {
+    function updateCountdowns() {
       const now = new Date().getTime();
-      const distance = targetDate - now;
 
-      if (distance <= 0) {
-        document.getElementById("countdown").innerHTML = "🎉 Avatar 3 Release Day!";
-        return;
+      // Clock 1
+      let distance1 = target1 - now;
+      if (distance1 <= 0) {
+        document.getElementById("countdown1").innerHTML = "🎉 Avatar 3 Release Day!";
+      } else {
+        const days1 = Math.floor(distance1 / (1000 * 60 * 60 * 24));
+        const hours1 = Math.floor((distance1 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes1 = Math.floor((distance1 % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds1 = Math.floor((distance1 % (1000 * 60)) / 1000);
+
+        document.getElementById("days1").textContent = days1;
+        document.getElementById("hours1").textContent = hours1;
+        document.getElementById("minutes1").textContent = minutes1;
+        document.getElementById("seconds1").textContent = seconds1;
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // Clock 2
+      let distance2 = target2 - now;
+      if (distance2 <= 0) {
+        document.getElementById("countdown2").innerHTML = "🎉 Avatar 4 Release Day!";
+      } else {
+        const days2 = Math.floor(distance2 / (1000 * 60 * 60 * 24));
+        const hours2 = Math.floor((distance2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes2 = Math.floor((distance2 % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds2 = Math.floor((distance2 % (1000 * 60)) / 1000);
 
-      document.getElementById("days").textContent = days;
-      document.getElementById("hours").textContent = hours;
-      document.getElementById("minutes").textContent = minutes;
-      document.getElementById("seconds").textContent = seconds;
+        document.getElementById("days2").textContent = days2;
+        document.getElementById("hours2").textContent = hours2;
+        document.getElementById("minutes2").textContent = minutes2;
+        document.getElementById("seconds2").textContent = seconds2;
+      }
     }
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    setInterval(updateCountdowns, 1000);
+    updateCountdowns();
 
     // === Particle Animation ===
     const canvas = document.getElementById("particles");
@@ -118,13 +144,12 @@
       for (let p of particles) {
         ctx.beginPath();
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 3);
-        gradient.addColorStop(0, `rgba(0,255,200,${p.opacity})`);
+        gradient.addColorStop(0, `rgba(3,205,243,${p.opacity})`);
         gradient.addColorStop(1, "transparent");
         ctx.fillStyle = gradient;
         ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
         ctx.fill();
 
-        // Move downward slowly
         p.y += p.speed;
         if (p.y > canvas.height) {
           p.y = -10;
