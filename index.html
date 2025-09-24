@@ -5,42 +5,55 @@
   <title>Avatar 3 Countdown</title>
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      margin: 0;
+      overflow: hidden; /* so particles don’t cause scrollbars */
       background: #0b0c10;
       color: #fff;
-      font-family: Papyrus, fantasy; /* Default for everything */
+      font-family: Papyrus, fantasy;
       text-align: center;
     }
     h1 {
+      position: relative;
+      z-index: 1;
       font-size: 2.5em;
-      margin-bottom: 20px;
+      margin-top: 60px;
       color: #4ecdc4;
       text-shadow: 0 0 10px #00fff7, 0 0 20px #00d4ff;
     }
     .countdown {
+      position: relative;
+      z-index: 1;
       font-size: 3em;
-      background: #1a1a1a;
+      background: rgba(20,20,20,0.7);
       padding: 20px 40px;
       border-radius: 15px;
+      margin-top: 20px;
       box-shadow: 0 0 25px rgba(0,255,200,0.2);
       color: #00eaff;
       text-shadow: 
         0 0 10px #00eaff,
         0 0 20px #00eaff,
         0 0 40px #00ffcc;
+      display: inline-block;
     }
     .label {
       font-size: 0.4em;
       color: #88fff7;
       text-shadow: 0 0 8px #00ffcc;
     }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0; /* behind text */
+    }
   </style>
 </head>
 <body>
+  <canvas id="particles"></canvas>
+
   <h1>Time until James Cameron's Avatar 3: Fire and Ash</h1>
 
   <div class="countdown" id="countdown">
@@ -51,7 +64,7 @@
   </div>
 
   <script>
-    // Set the target date to December 19, 2025 at midnight
+    // === Countdown Logic ===
     const targetDate = new Date("December 19, 2025 00:00:00").getTime();
 
     function updateCountdown() {
@@ -74,9 +87,54 @@
       document.getElementById("seconds").textContent = seconds;
     }
 
-    // Update every second
     setInterval(updateCountdown, 1000);
-    updateCountdown(); // Run once at start
+    updateCountdown();
+
+    // === Particle Animation ===
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Create particles
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 3 + 1,
+        speed: Math.random() * 0.5 + 0.2,
+        opacity: Math.random() * 0.5 + 0.5
+      });
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        ctx.beginPath();
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 3);
+        gradient.addColorStop(0, `rgba(0,255,200,${p.opacity})`);
+        gradient.addColorStop(1, "transparent");
+        ctx.fillStyle = gradient;
+        ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Move downward slowly
+        p.y += p.speed;
+        if (p.y > canvas.height) {
+          p.y = -10;
+          p.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(drawParticles);
+    }
+
+    drawParticles();
   </script>
 </body>
 </html>
